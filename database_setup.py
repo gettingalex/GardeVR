@@ -12,14 +12,14 @@ conn.execute('''CREATE TABLE users
              password TEXT NOT NULL);''')
 
 # Create a table for the first product
-conn.execute('''CREATE TABLE product1
+conn.execute('''CREATE TABLE 20feet
              (product_id INTEGER PRIMARY KEY AUTOINCREMENT,
              name TEXT NOT NULL,
              description TEXT NOT NULL,
              price REAL NOT NULL);''')
 
 # Create a table for the second product
-conn.execute('''CREATE TABLE product2
+conn.execute('''CREATE TABLE 35feet
              (product_id INTEGER PRIMARY KEY AUTOINCREMENT,
              name TEXT NOT NULL,
              description TEXT NOT NULL,
