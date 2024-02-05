@@ -1,10 +1,12 @@
 #code reference https://testdriven.io/blog/flask-stripe-tutorial/ with repo https://github.com/testdrivenio/flask-stripe-checkout
 
-
+import os
 from flask import Flask, jsonify, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-import os
+from sqlalchemy.sql import func
 import stripe
+
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 
@@ -24,14 +26,39 @@ stripe_keys = {
 }
 stripe.api_key = stripe_keys["secret_key"]
 
+#DB Model Setup
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    firstname = db.Column(db.String(100), nullable=False)
+    lastname = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(80), unique=True, nullable=False)
+    address = db.Column(db.String(100), nullable=False)
+
+    def __repr__(self):
+        return f'<User {self.firstname}>'
+    
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(100), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    stock_quantity = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self):
+        return f'<Product {self.name}>'
+#End of DB setup
+
+
+@app.route('/')
+def index():
+    return render_template("index.html")
+
+#Stripe API
 @app.route("/config")
 def get_publishable_key():
     stripe_config = {"publicKey": stripe_keys["publishable_key"]}
     return jsonify(stripe_config)
 
-@app.route('/')
-def index():
-    return render_template("index.html")
 
 
 @app.route("/create-checkout-session")
@@ -63,8 +90,6 @@ def create_checkout_session():
         return jsonify({"sessionId": checkout_session["id"]})
     except Exception as e:
         return jsonify(error=str(e)), 403
-    
-    
 
 
 @app.route("/webhook", methods=['POST'])
@@ -107,6 +132,8 @@ def success():
 @app.route("/cancelled")
 def cancelled():
     return render_template("cancelled.html")
+
+#End of Stripe API
 
 if __name__ == '__main__':
     print("Starting Flask app...")
