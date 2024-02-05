@@ -1,15 +1,19 @@
 #code reference https://testdriven.io/blog/flask-stripe-tutorial/ with repo https://github.com/testdrivenio/flask-stripe-checkout
 
 
-import sqlite3
 from flask import Flask, jsonify, render_template, request, redirect
+from flask_sqlalchemy import SQLAlchemy
 import os
 import stripe
 
 app = Flask(__name__)
 
-# Connect to the SQLite database
-conn = sqlite3.connect('bookings.db')
+# Configure the SQLAlchemy part of the app instance
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bookings.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Create the SQLAlchemy db instance
+db = SQLAlchemy(app)
 
 domain_url = "http://127.0.0.1:5000/"
 
