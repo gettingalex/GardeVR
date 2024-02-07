@@ -2,8 +2,10 @@
 
 {% block content %}
   <section class="section">
+    {% for product in products %}
     <div class="container">
-      <button class="button is-primary" id="submitBtn">Réserver 25' ou moins</button>
+      <button class="button is-primary" id="submitBtn">{{ product.product_name}}</button>
     </div>
+    {% endfor %}
   </section>
 {% endblock %}

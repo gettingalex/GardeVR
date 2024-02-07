@@ -39,19 +39,21 @@ class User(db.Model):
     
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.String(100), nullable=False)
-    price = db.Column(db.Float, nullable=False)
+    product_name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(100), nullable=False) 
+    price = db.Column(db.Integer, nullable=False)
     stock_quantity = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return f'<Product {self.name}>'
+    
 #End of DB setup
 
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    products = Product.query.all()
+    return render_template("index.html", products=products)
 
 #Stripe API
 @app.route("/config")
