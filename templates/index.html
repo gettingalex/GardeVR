@@ -5,7 +5,7 @@
     {% for product in products %}
     <div class="container">
       <!--id="submitBtn+{{product.id}}">-->
-      <button class="button is-primary" price_ID="price_1Oe8GaLTe1GzTq0NzT4ydxJO" id="submitBtn">{{ product.product_name}}</button>
+      <button class="button is-primary" price_ID={{product.price_id}} id="submitBtn">{{ product.product_name}}</button>
     </div>
     {% endfor %}
   </section>
