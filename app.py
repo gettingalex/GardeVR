@@ -1,7 +1,7 @@
 #code reference https://testdriven.io/blog/flask-stripe-tutorial/ with repo https://github.com/testdrivenio/flask-stripe-checkout
 
 import os
-from flask import Flask, jsonify, render_template, request, redirect
+from flask import Flask, jsonify, render_template, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 import stripe
@@ -9,6 +9,8 @@ import stripe
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
+
+app.secret_key = '101010'  # replace with your actual secret key
 
 # Configure the SQLAlchemy part of the app instance
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bookings.db'
@@ -61,12 +63,18 @@ def get_publishable_key():
     stripe_config = {"publicKey": stripe_keys["publishable_key"]}
     return jsonify(stripe_config)
 
-
+@app.route('/process_variable', methods=['GET', 'POST'])
+def process_variable():
+    data = request.get_json()
+    session['price'] = data['product_price']  # assign the received value to 'price'
+    # Now you can use 'price' in your application
+    return 'Success!', 200
 
 @app.route("/create-checkout-session")
 def create_checkout_session():
     stripe.api_key = stripe_keys["secret_key"]
-
+    price = session.get('price')  # retrieve price from session
+    stripe.api_key = stripe_keys["secret_key"]
     try:
         # Create new Checkout Session for the order
         # Other optional params include:
@@ -76,7 +84,7 @@ def create_checkout_session():
         # [customer_email] - lets you prefill the email input in the form
         # For full details see https:#stripe.com/docs/api/checkout/sessions/create
 
-        # ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
+        # ?session_id={CHECKOUT_SESSION_ID} means x6                                                                                                                                                                                                                                                                     the redirect will have the session ID set as a query param
         checkout_session = stripe.checkout.Session.create(
             success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
             cancel_url=domain_url + "cancelled",
@@ -84,7 +92,7 @@ def create_checkout_session():
             mode="payment",
             line_items=[
                 {
-                    "price": "price_1Oe8GaLTe1GzTq0NzT4ydxJO",
+                    "price": price,
                     "quantity": 1
                 }
             ]
@@ -92,6 +100,7 @@ def create_checkout_session():
         return jsonify({"sessionId": checkout_session["id"]})
     except Exception as e:
         return jsonify(error=str(e)), 403
+
 
 
 @app.route("/webhook", methods=['POST'])
