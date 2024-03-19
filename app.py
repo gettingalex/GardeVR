@@ -79,8 +79,8 @@ def process_variable():
     return 'Success!', 200
 
 # Can add recurring payment with  https://stripe.com/docs/recurring-payments#installment-plans
-@app.route("/create-installment-session")
-def create_installment_session():
+#@app.route("/create-installment-session")
+#def create_installment_session():
     stripe.api_key = stripe_keys["secret_key"]
     price = session.get('price')  # retrieve price from session
     try:
