@@ -80,10 +80,11 @@ def process_variable():
     return 'Success!', 200
 
 # Can add recurring payment with  https://stripe.com/docs/recurring-payments#installment-plans
-@app.route("/create-installment-session")
-def create_installment_session():
+#@app.route("/create-installment-session")
+#def create_installment_session():
     stripe.api_key = stripe_keys["secret_key"]
     price = session.get('price')  # retrieve price from session
+    print(price)
     try:
         # Create new Checkout Session for the order
         # Other optional params include:
@@ -94,25 +95,20 @@ def create_installment_session():
         # For full details see https:#stripe.com/docs/api/checkout/sessions/create
         # ?session_id={CHECKOUT_SESSION_ID} means x6                                                                                                                                                                                                                                                                     the redirect will have the session ID set as a query param
         checkout_session = stripe.SubscriptionSchedule.create(
-            customer='{{CUSTOMER_ID}}',
+            # customer='{{CUSTOMER_ID}}',
             # PRODUCT_ID = "prod_PT4R8sMVH9bImH",
+            success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
+            cancel_url=domain_url + "cancelled",
+            mode = 'subscription',
+            payment_method_types=["card"],
             start_date = int(datetime(2024, 10, 1).timestamp()),  # start date set to October 1
-            end_behavior="cancel",
-            phases=[
-                {
-                    "items": [
-                        {
-                            "price_data": {
-                                "currency": "cad",
-                                "product": "{{PRODUCT_ID}}",
-                                "unit_amount": price,
-                            },
-                        }
-                    ],
-                    "iterations": 1,
-                    "duration": "month",
-                } for _ in range(6)  # 6 installments
-            ],
+            line_item=[{
+                "price": price,
+                "quantity": 1,
+                #    "iterations": 1,
+                #    "duration": "month",
+                # } for _ in range(6)  # 6 installments
+            }],
         )
 
 
@@ -176,6 +172,7 @@ def stripe_webhook():
         session = event['data']['object']
 
         # Fulfill the purchase...
+        print(session)
         handle_checkout_session(session)
 
     return 'Success', 200
@@ -183,7 +180,20 @@ def stripe_webhook():
 
 def handle_checkout_session(session):
     print("Payment was successful.")
-    # TODO: run some custom code here
+    # Assuming the product id is stored in session['display_items'][0]['custom']['name']
+    product_id = session['display_items'][0]['custom']['name']
+    ("product_id: " + product_id)
+    #update_stock(product_id)
+
+def update_stock(product_id):
+    # Get the product from the database
+    product = Product.query.filter_by(product_id=product_id).first()
+
+    # Decrease the stock by 1
+    product.stock -= 1
+
+    # Commit the changes
+    db.session.commit()
 
 @app.route("/success")
 def success():
