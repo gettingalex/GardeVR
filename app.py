@@ -95,7 +95,7 @@ def create_installment_session():
         # ?session_id={CHECKOUT_SESSION_ID} means x6                                                                                                                                                                                                                                                                     the redirect will have the session ID set as a query param
         checkout_session = stripe.SubscriptionSchedule.create(
             customer='{{CUSTOMER_ID}}',
-            PRODUCT_ID = "prod_PT4R8sMVH9bImH",
+            # PRODUCT_ID = "prod_PT4R8sMVH9bImH",
             start_date = int(datetime(2024, 10, 1).timestamp()),  # start date set to October 1
             end_behavior="cancel",
             phases=[

@@ -7,10 +7,10 @@ fetch("/config")
   // Initialize Stripe.js
   const stripe = Stripe(data.publicKey);
 
-  // Event handler
-  let buttons = document.getElementsByClassName("submitBtn");
-  for(let i = 0; i < buttons.length; i++) {
-    buttons[i].addEventListener("click", function() {
+  // Event handler: full price
+  const buttons1 = document.getElementsByClassName("submitBtn");
+  for(let i = 0; i < buttons2.length; i++) {
+    buttons1[i].addEventListener("click", function() {
       var price_var = this.getAttribute('price_ID'); // 'this' refers to the button that was clicked
       fetch('/process_variable', {
         method: 'POST',
@@ -35,5 +35,35 @@ fetch("/config")
       });
     });
   }
+
+  const buttons2 = document.getElementsByClassName("submitBtn-installment");
+  for(let i = 0; i < buttons2.length; i++) {
+    buttons2[i].addEventListener("click", function() {
+      var price_var = this.getAttribute('price_ID'); // 'this' refers to the button that was clicked
+      fetch('/process_variable', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({product_price: price_var}),
+      })
+      .then(response => response.text())
+      .then(() => {
+        // Get Checkout Session ID
+        return fetch("/create-installment-session")
+      })
+      .then((result) => { return result.json(); })
+      .then((data) => {
+        console.log(data);
+        // Redirect to Stripe Checkout
+        return stripe.redirectToCheckout({sessionId: data.sessionId})
+      })
+      .then((res) => {
+        console.log(res);
+      });
+    });
+  }
 }); // Add closing parenthesis and semicolon here
+
+
 
