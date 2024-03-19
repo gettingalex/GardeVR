@@ -7,6 +7,7 @@ from sqlalchemy.sql import func
 import stripe
 from flask_migrate import Migrate
 import time
+from datetime import datetime
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -79,8 +80,8 @@ def process_variable():
     return 'Success!', 200
 
 # Can add recurring payment with  https://stripe.com/docs/recurring-payments#installment-plans
-#@app.route("/create-installment-session")
-#def create_installment_session():
+@app.route("/create-installment-session")
+def create_installment_session():
     stripe.api_key = stripe_keys["secret_key"]
     price = session.get('price')  # retrieve price from session
     try:
@@ -91,29 +92,30 @@ def process_variable():
         # [payment_intent_data] - lets capture the payment later
         # [customer_email] - lets you prefill the email input in the form
         # For full details see https:#stripe.com/docs/api/checkout/sessions/create
-
         # ?session_id={CHECKOUT_SESSION_ID} means x6                                                                                                                                                                                                                                                                     the redirect will have the session ID set as a query param
         checkout_session = stripe.SubscriptionSchedule.create(
             customer='{{CUSTOMER_ID}}',
-            start_date="now",
+            PRODUCT_ID = "prod_PT4R8sMVH9bImH",
+            start_date = int(datetime(2024, 10, 1).timestamp()),  # start date set to October 1
             end_behavior="cancel",
             phases=[
                 {
-                "items": [
-                    {
-                    "price_data": {
-                        "currency": "usd",
-                        "product": "prod_PT4R8sMVH9bImH",
-                        "recurring": {"interval": "month"},
-                        "unit_amount": 774,
-                    },
-                    "quantity": 1,
-                    },
-                ],
-                "iterations": 6,
-                },
+                    "items": [
+                        {
+                            "price_data": {
+                                "currency": "cad",
+                                "product": "{{PRODUCT_ID}}",
+                                "unit_amount": price,
+                            },
+                        }
+                    ],
+                    "iterations": 1,
+                    "duration": "month",
+                } for _ in range(6)  # 6 installments
             ],
         )
+
+
         return jsonify({"sessionId": checkout_session["id"]})
     except Exception as e:
         return jsonify(error=str(e)), 403
