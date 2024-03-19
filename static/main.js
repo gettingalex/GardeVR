@@ -8,9 +8,9 @@ fetch("/config")
   const stripe = Stripe(data.publicKey);
 
   // Event handler: full price
-  const buttons1 = document.getElementsByClassName("submitBtn");
-  for(let i = 0; i < buttons2.length; i++) {
-    buttons1[i].addEventListener("click", function() {
+  const buttonsOne = document.getElementsByClassName("submitBtn");
+  for(let i = 0; i < buttonsOne.length; i++) {
+    buttonsOne[i].addEventListener("click", function() {
       var price_var = this.getAttribute('price_ID'); // 'this' refers to the button that was clicked
       fetch('/process_variable', {
         method: 'POST',
@@ -35,10 +35,10 @@ fetch("/config")
       });
     });
   }
-
-  const buttons2 = document.getElementsByClassName("submitBtn-installment");
-  for(let i = 0; i < buttons2.length; i++) {
-    buttons2[i].addEventListener("click", function() {
+  // Installment event handler
+  const buttonsTwo = document.getElementsByClassName("submitBtn-installment");
+  for(let i = 0; i < buttonsTwo.length; i++) {
+    buttonsTwo[i].addEventListener("click", function() {
       var price_var = this.getAttribute('price_ID'); // 'this' refers to the button that was clicked
       fetch('/process_variable', {
         method: 'POST',
