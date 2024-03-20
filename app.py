@@ -25,7 +25,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Create the SQLAlchemy db instance
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-domain_url = "https://gardevr.onrender.com"
+domain_url = "https://gardevr.onrender.com" #http://127.0.0.1:5000
 
 stripe_keys = {
     "secret_key": os.environ["STRIPE_SECRET_KEY"],
