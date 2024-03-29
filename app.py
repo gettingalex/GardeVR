@@ -8,14 +8,13 @@ import stripe
 from flask_migrate import Migrate
 import time
 from datetime import datetime
+from flask import Session
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 
 app.secret_key = '101010'  # replace with your actual secret key
-
-
 
 
 # Configure the SQLAlchemy part of the app instance
@@ -79,43 +78,6 @@ def process_variable():
     # Now you can use 'price' in your application
     return 'Success!', 200
 
-# Can add recurring payment with  https://stripe.com/docs/recurring-payments#installment-plans
-#@app.route("/create-installment-session")
-#def create_installment_session():
-    stripe.api_key = stripe_keys["secret_key"]
-    price = session.get('price')  # retrieve price from session
-    print(price)
-    try:
-        # Create new Checkout Session for the order
-        # Other optional params include:
-        # [billing_address_collection] - to display billing address details on the page
-        # [customer] - if you have an existing Stripe Customer ID
-        # [payment_intent_data] - lets capture the payment later
-        # [customer_email] - lets you prefill the email input in the form
-        # For full details see https:#stripe.com/docs/api/checkout/sessions/create
-        # ?session_id={CHECKOUT_SESSION_ID} means x6                                                                                                                                                                                                                                                                     the redirect will have the session ID set as a query param
-        checkout_session = stripe.SubscriptionSchedule.create(
-            # customer='{{CUSTOMER_ID}}',
-            # PRODUCT_ID = "prod_PT4R8sMVH9bImH",
-            success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
-            cancel_url=domain_url + "cancelled",
-            mode = 'subscription',
-            payment_method_types=["card"],
-            start_date = int(datetime(2024, 10, 1).timestamp()),  # start date set to October 1
-            line_item=[{
-                "price": price,
-                "quantity": 1,
-                #    "iterations": 1,
-                #    "duration": "month",
-                # } for _ in range(6)  # 6 installments
-            }],
-        )
-
-
-        return jsonify({"sessionId": checkout_session["id"]})
-    except Exception as e:
-        return jsonify(error=str(e)), 403
-
 @app.route("/create-checkout-session")
 def create_checkout_session():
     stripe.api_key = stripe_keys["secret_key"]
@@ -150,21 +112,24 @@ def create_checkout_session():
 
 
 @app.route("/webhook", methods=['POST'])
-def stripe_webhook():
-    payload = request.get_data(as_text=True)
-    sig_header = request.headers.get('Stripe-Signature')
+def webhook():
+    event = None
+    payload = request.data
+    sig_header = request.headers['STRIPE_SIGNATURE']
+    print(payload)
 
     try:
         event = stripe.Webhook.construct_event(
             payload, sig_header, stripe_keys["endpoint_secret"]
         )
+        print("listening for event")
 
     except ValueError as e:
         # Invalid payload
-        return 'Invalid payload', 400
+        raise e
     except stripe.error.SignatureVerificationError as e:
         # Invalid signature
-        return 'Invalid signature', 400
+        raise e
 
     # Handle the checkout.session.completed event
     if event['type'] == 'checkout.session.completed':
@@ -172,10 +137,18 @@ def stripe_webhook():
         session = event['data']['object']
 
         # Fulfill the purchase...
-        print(session)
-        handle_checkout_session(session)
+        ##handle_checkout_session(session)
+    
+    if event['type'] == 'payment_intent.succeeded':
+        print('payment intent succeeded')
+        session = event['data']['object']
+        # Fulfill the purchase...
+        ##handle_checkout_session(session)
+    
+    else:
+        print('Unhandled event type {}'.format(event['type']))
 
-    return 'Success', 200
+    return jsonify(success=True)
 
 
 def handle_checkout_session(session):
@@ -186,8 +159,10 @@ def handle_checkout_session(session):
     #update_stock(product_id)
 
 def update_stock(product_id):
+    print('prep to update stock')
     # Get the product from the database
     product = Product.query.filter_by(product_id=product_id).first()
+    print('product for DB:'+ product)
 
     # Decrease the stock by 1
     product.stock -= 1
