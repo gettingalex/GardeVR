@@ -8,7 +8,6 @@ import stripe
 from flask_migrate import Migrate
 import time
 from datetime import datetime
-from flask_session.__init__ import Session
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -97,7 +96,7 @@ def create_checkout_session():
             cancel_url=domain_url + "cancelled",
             payment_method_types=["card"],
             billing_address_collection="required",
-
+            tax_behavior="exclusive",
             mode="payment",
             expires_at=int(time.time() + (3600 * 2)), # Configured to expire after 2 hours
             line_items=[
