@@ -96,6 +96,7 @@ def create_checkout_session():
             cancel_url=domain_url + "/cancelled",
             payment_method_types=["card"],
             billing_address_collection="required",
+            automatic_tax="enabled"
             #tax_behavior="exclusive",
             mode="payment",
             expires_at=int(time.time() + (3600 * 2)), # Configured to expire after 2 hours
