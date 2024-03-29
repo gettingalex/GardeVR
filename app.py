@@ -8,7 +8,7 @@ import stripe
 from flask_migrate import Migrate
 import time
 from datetime import datetime
-from flask import Session
+from flask_session import Session
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
