@@ -103,7 +103,10 @@ def create_checkout_session():
             line_items=[
                 {
                     "price": price,
-                    "quantity": 1
+                    "quantity": 1,
+                    "metadata": {
+                        "price_id": price  # Add the product_id here
+                    }
                 }
             ]
         )
@@ -143,10 +146,8 @@ def webhook():
     
     if event['type'] == 'payment_intent.succeeded':
         print('payment intent succeeded')
-        session = event['data']['object']
-        for item in session['display_items']:
-            product_id = item['custom']['product']['id']
-            print(f"Product ID: {product_id}")
+        session = event['data']['object']['metadata']['price_id']
+        print("Price ID: {session}")
         # Then define and call a method to handle the successful checkout
 
         # Fulfill the purchase...
@@ -160,9 +161,8 @@ def webhook():
 
 def handle_checkout_session(session):
     print("Payment was successful.")
-    # Assuming the product id is stored in session['display_items'][0]['custom']['name']
-    product_id = session['data']['object']['amount']
-    ("product_id: " + product_id)
+    # Assuming the product id is stored in session
+    ("price_id in handle checkout: " + session)
     #update_stock(product_id)
 
 def update_stock(product_id):
