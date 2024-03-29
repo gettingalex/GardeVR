@@ -8,7 +8,7 @@ import stripe
 from flask_migrate import Migrate
 import time
 from datetime import datetime
-from flask_session import Session
+from flask_session.__init__ import Session
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -46,7 +46,7 @@ class User(db.Model):
         return f'<User {self.firstname}>'
     
 class Product(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(100), primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     product_name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(100), nullable=False) 
@@ -96,6 +96,8 @@ def create_checkout_session():
             success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
             cancel_url=domain_url + "cancelled",
             payment_method_types=["card"],
+            billing_address_collection="required",
+
             mode="payment",
             expires_at=int(time.time() + (3600 * 2)), # Configured to expire after 2 hours
             line_items=[
@@ -142,19 +144,24 @@ def webhook():
     if event['type'] == 'payment_intent.succeeded':
         print('payment intent succeeded')
         session = event['data']['object']
+        for item in session['display_items']:
+            product_id = item['custom']['product']['id']
+            print(f"Product ID: {product_id}")
+        # Then define and call a method to handle the successful checkout
+
         # Fulfill the purchase...
-        ##handle_checkout_session(session)
+        handle_checkout_session(session)
     
     else:
         print('Unhandled event type {}'.format(event['type']))
 
-    return jsonify(success=True)
+    return 'success' ##jsonify(success=True)
 
 
 def handle_checkout_session(session):
     print("Payment was successful.")
     # Assuming the product id is stored in session['display_items'][0]['custom']['name']
-    product_id = session['display_items'][0]['custom']['name']
+    product_id = session['data']['object']['amount']
     ("product_id: " + product_id)
     #update_stock(product_id)
 
