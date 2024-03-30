@@ -121,7 +121,7 @@ def webhook():
     event = None
     payload = request.data
     sig_header = request.headers['STRIPE_SIGNATURE']
-    #print(payload)
+    print(payload)
 
     try:
         event = stripe.Webhook.construct_event(
@@ -179,7 +179,7 @@ def update_stock(product_id):
     # Commit the changes
     #db.session.commit()
 
-    print("product with id" + product_id + "as stock level" + product.stock)
+    
 
 @app.route("/success")
 def success():
