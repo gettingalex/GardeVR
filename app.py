@@ -139,20 +139,21 @@ def webhook():
     # Handle the checkout.session.completed event
     if event['type'] == 'checkout.session.completed':
         print("Payment was successful.")
-        session = event['data']['object']
+        session = event['data']['object']['metadata']['product_id']
+        print("Product_id:" + session)
 
 
         # Fulfill the purchase...
-        ##handle_checkout_session(session)
+        # handle_checkout_session(session)
     
     if event['type'] == 'payment_intent.succeeded':
         print('payment intent succeeded')
-        session = event['data']['object']['metadata']['price_id']
-        print("Price ID: {session}")
+        session = event['data']['object']['metadata']['product_id']
+        print("Product_id:" + session)
         # Then define and call a method to handle the successful checkout
 
         # Fulfill the purchase...
-        handle_checkout_session(session)
+        # handle_checkout_session(session)
     
     else:
         print('Unhandled event type {}'.format(event['type']))
@@ -163,14 +164,15 @@ def webhook():
 def handle_checkout_session(session):
     print("Payment was successful.")
     # Assuming the product id is stored in session
-    ("price_id in handle checkout: " + session)
-    #update_stock(product_id)
+    ("product_id in handle checkout: " + session)
+    update_stock(session)
 
 def update_stock(product_id):
     print('prep to update stock')
     # Get the product from the database
     product = Product.query.filter_by(product_id=product_id).first()
     print('product for DB:'+ product)
+    print('product_id from webhook' + product_id)
 
     # Decrease the stock by 1
     product.stock -= 1
