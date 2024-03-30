@@ -149,7 +149,7 @@ def webhook():
         # Fulfill the purchase...
         # handle_checkout_session(session_product_id)
     
-    if event['type'] == 'payment_intent.succeeded':
+    if event['type'] == 'payment_intent.succeeded' or event['type'] == 'charge.succeeded' or event['type'] == 'payment_intent.created':
         print('payment intent succeeded')
         session_metadata = event['data']['object']['metadata']
         if session_metadata:
