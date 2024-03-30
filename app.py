@@ -121,8 +121,8 @@ def webhook():
     event = None
     payload = request.data
     sig_header = request.headers['STRIPE_SIGNATURE']
-    ## print(payload)
-    print("webhook received")
+    #print(payload)
+    print("received webhook")
 
     try:
         event = stripe.Webhook.construct_event(
@@ -140,20 +140,30 @@ def webhook():
     # Handle the checkout.session.completed event
     if event['type'] == 'checkout.session.completed':
         print("Payment was successful.")
-        session_product_id = event['data']['object']['metadata']['product_id']
-        print("Product_id:" + session_product_id)
-
+        session_metadata = event['data']['object']['metadata']
+        if session_metadata:
+            session_product_id = event['data']['object']['metadata']['product_id']
+            print("Product_id:" + session_product_id)
+        else:
+            print("No metadata")
         # Fulfill the purchase...
         # handle_checkout_session(session_product_id)
     
-    #if event['type'] == 'payment_intent.succeeded':
-    #    print('payment intent succeeded')
-    #    session_product_id = event['data']['object']['metadata']['product_id']
-    #    print("Product_id:" + session_product_id)
-    #    # Then define and call a method to handle the successful checkout
-    #
-    #    # Fulfill the purchase...
-    #    # handle_checkout_session(session_product_id)
+    if event['type'] == 'payment_intent.succeeded':
+        print('payment intent succeeded')
+        session_metadata = event['data']['object']['metadata']
+        if session_metadata:
+            session_product_id = event['data']['object']['metadata']['product_id']
+            print("Product_id:" + session_product_id)
+        else:
+            print("No metadata")
+            # Then define and call a method to handle the successful checkout
+            # Fulfill the purchase...
+            # handle_checkout_session(session_product_id)
+        # Then define and call a method to handle the successful checkout
+
+        # Fulfill the purchase...
+        # handle_checkout_session(session_product_id)
     
     else:
         print('Unhandled event type {}'.format(event['type']))
@@ -179,8 +189,6 @@ def update_stock(product_id):
 
     # Commit the changes
     #db.session.commit()
-
-    
 
 @app.route("/success")
 def success():
