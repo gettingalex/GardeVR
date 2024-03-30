@@ -139,21 +139,20 @@ def webhook():
     # Handle the checkout.session.completed event
     if event['type'] == 'checkout.session.completed':
         print("Payment was successful.")
-        session = event['data']['object']['metadata']['product_id']
-        print("Product_id:" + session)
-
+        session_product_id = event['data']['object']['metadata']['product_id']
+        print("Product_id:" + session_product_id)
 
         # Fulfill the purchase...
-        # handle_checkout_session(session)
+        # handle_checkout_session(session_product_id)
     
-    if event['type'] == 'payment_intent.succeeded':
-        print('payment intent succeeded')
-        session = event['data']['object']['metadata']['product_id']
-        print("Product_id:" + session)
-        # Then define and call a method to handle the successful checkout
-
-        # Fulfill the purchase...
-        # handle_checkout_session(session)
+    #if event['type'] == 'payment_intent.succeeded':
+    #    print('payment intent succeeded')
+    #    session_product_id = event['data']['object']['metadata']['product_id']
+    #    print("Product_id:" + session_product_id)
+    #    # Then define and call a method to handle the successful checkout
+    #
+    #    # Fulfill the purchase...
+    #    # handle_checkout_session(session_product_id)
     
     else:
         print('Unhandled event type {}'.format(event['type']))
@@ -175,10 +174,10 @@ def update_stock(product_id):
     print('product_id from webhook' + product_id)
 
     # Decrease the stock by 1
-    product.stock -= 1
+    #product.stock -= 1
 
     # Commit the changes
-    db.session.commit()
+    #db.session.commit()
 
 @app.route("/success")
 def success():
