@@ -95,6 +95,7 @@ def create_checkout_session():
             success_url=domain_url + "/success?session_id={CHECKOUT_SESSION_ID}",
             cancel_url=domain_url + "/cancelled",
             payment_method_types=["card"],
+            metadata={"price_id":price},
             billing_address_collection="required",
             automatic_tax={"enabled": True},
             #tax_behavior="exclusive",
@@ -103,10 +104,7 @@ def create_checkout_session():
             line_items=[
                 {
                     "price": price,
-                    "quantity": 1,
-                    "metadata": {
-                        "price_id": price  # Add the product_id here
-                    }
+                    "quantity": 1
                 }
             ]
         )
