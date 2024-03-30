@@ -121,8 +121,9 @@ def webhook():
     event = None
     payload = request.data
     sig_header = request.headers['STRIPE_SIGNATURE']
-    print(payload)
+    #print(payload)
     print("received webhook")
+    product_id_checkout = []
 
     try:
         event = stripe.Webhook.construct_event(
@@ -137,24 +138,15 @@ def webhook():
         # Invalid signature
         raise e
 
-    # Handle the checkout.session.completed event
-    if event['type'] == 'checkout.session.completed':
-        print("Payment was successful.")
-        session_metadata = event['data']['object']['metadata']
-        if session_metadata:
-            session_product_id = event['data']['object']['metadata']['product_id']
-            print("Product_id:" + session_product_id)
-        else:
-            print("No metadata")
-        # Fulfill the purchase...
-        # handle_checkout_session(session_product_id)
-    
-    if event['type'] == 'payment_intent.succeeded' or event['type'] == 'charge.succeeded' or event['type'] == 'payment_intent.created':
+    # Handle the webook 
+    if event['type'] == 'payment_intent.succeeded' or event['type'] == 'charge.succeeded' or event['type'] == 'payment_intent.created' or event['type'] == 'checkout.session.completed':
         print('payment intent succeeded')
         session_metadata = event['data']['object']['metadata']
         if session_metadata:
             session_product_id = event['data']['object']['metadata']['product_id']
+            product_id_checkout.append(session_product_id)
             print("Product_id:" + session_product_id)
+            print("product_id_checkout:" + product_id_checkout)
         else:
             print("No metadata")
             # Then define and call a method to handle the successful checkout
