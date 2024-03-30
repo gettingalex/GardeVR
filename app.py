@@ -156,7 +156,8 @@ def webhook():
         # Then define and call a method to handle the successful checkout
 
         # Fulfill the purchase...
-        handle_checkout_session(product_id_checkout)
+        if product_id_checkout:
+            handle_checkout_session(product_id_checkout)
     
     else:
         print('Unhandled event type {}'.format(event['type']))
