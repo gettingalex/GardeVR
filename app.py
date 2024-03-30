@@ -156,7 +156,7 @@ def webhook():
         # Then define and call a method to handle the successful checkout
 
         # Fulfill the purchase...
-        # handle_checkout_session(session_product_id)
+        handle_checkout_session(product_id_checkout)
     
     else:
         print('Unhandled event type {}'.format(event['type']))
@@ -164,11 +164,12 @@ def webhook():
     return 'success' ##jsonify(success=True)
 
 
-def handle_checkout_session(session):
+def handle_checkout_session(product_id_checkout):
     print("Payment was successful.")
     # Assuming the product id is stored in session
-    ("product_id in handle checkout: " + session)
-    update_stock(session)
+    product_id = str(product_id_checkout[0])
+    ("product_id in handle checkout: " + product_id)
+    #update_stock(product_id)
 
 def update_stock(product_id):
     print('prep to update stock')
