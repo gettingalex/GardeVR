@@ -12,12 +12,13 @@ fetch("/config")
   for(let i = 0; i < buttonsOne.length; i++) {
     buttonsOne[i].addEventListener("click", function() {
       var price_var = this.getAttribute('price_ID'); // 'this' refers to the button that was clicked
+      var product_id = this.getAttribute('product_ID');
       fetch('/process_variable', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({product_price: price_var}),
+        body: JSON.stringify({product_price: price_var, product_ID: product_id}),
       })
       .then(response => response.text())
       .then(() => {

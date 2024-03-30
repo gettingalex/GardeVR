@@ -74,6 +74,7 @@ def get_publishable_key():
 def process_variable():
     data = request.get_json()
     session['price'] = data['product_price']  # assign the received value to 'price'
+    session['product_id'] = data['product_ID'] # assign the received product id
     # Now you can use 'price' in your application
     return 'Success!', 200
 
@@ -81,6 +82,7 @@ def process_variable():
 def create_checkout_session():
     stripe.api_key = stripe_keys["secret_key"]
     price = session.get('price')  # retrieve price from session
+    product_id = session.get('product_id') #retrieve product_id from session
     try:
         # Create new Checkout Session for the order
         # Other optional params include:
@@ -95,7 +97,7 @@ def create_checkout_session():
             success_url=domain_url + "/success?session_id={CHECKOUT_SESSION_ID}",
             cancel_url=domain_url + "/cancelled",
             payment_method_types=["card"],
-            metadata={"price_id":price},
+            metadata={"product_id":product_id},
             billing_address_collection="required",
             automatic_tax={"enabled": True},
             #tax_behavior="exclusive",
@@ -138,6 +140,7 @@ def webhook():
     if event['type'] == 'checkout.session.completed':
         print("Payment was successful.")
         session = event['data']['object']
+
 
         # Fulfill the purchase...
         ##handle_checkout_session(session)
