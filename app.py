@@ -146,7 +146,8 @@ def webhook():
             session_product_id = event['data']['object']['metadata']['product_id']
             product_id_checkout.append(session_product_id)
             print("Product_id:" + session_product_id)
-            print("product_id_checkout:" + product_id_checkout)
+            print("product_id_checkout:" + str(product_id_checkout[0]))
+            
         else:
             print("No metadata")
             # Then define and call a method to handle the successful checkout
