@@ -107,7 +107,7 @@ def db_dashboard():
     for table in tables:
         query = text(f"SELECT * FROM {table}")
         result = db.session.execute(query)
-        data = [dict(row) for row in result]
+        data = [dict(row.items()) for row in result]
         tables_data[table] = data
     return render_template('db_dashboard.html', tables=tables_data)
 
