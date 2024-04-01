@@ -11,6 +11,7 @@ import time
 from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_httpauth import HTTPBasicAuth
+from sqlalchemy import text
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -104,7 +105,7 @@ def db_dashboard():
     tables = inspector.get_table_names()
     tables_data = {}
     for table in tables:
-        data = db.session.query(table).all()
+        data = db.session.query(db.Model).from_statement(text(f"SELECT * FROM {table}")).all()
         tables_data[table] = [str(item) for item in data]
     return render_template('db_dashboard.html', tables=tables_data)
 
