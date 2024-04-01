@@ -228,17 +228,21 @@ def update_stock(product_id):
     logging.info('prep to update stock')
     print('prep to update stock')
     # Get the product from the database
-    product = Product.query.filter_by(id=id).first()
+    product = Product.query.filter_by(id=product_id).first()
     logging.info('product for DB:'+ product)
     logging.info('product_id from webhook' + product_id)
+    print('product for DB:'+ product)
+    print('product_id from webhook' + product_id)
 
     # Decrease the stock by 1
     product.stock -= 1
     logging.info('stock reduced by 1')
+    print('stock reduced by 1')
 
     # Commit the changes
     db.session.commit()
     logging.info('db changed commited')
+    print('db changed commited')
 
 @app.route("/success")
 def success():
