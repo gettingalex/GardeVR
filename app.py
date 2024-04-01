@@ -221,13 +221,14 @@ def handle_checkout_session(product_id_checkout):
     logging.info("Payment was successful in handle checkout.")
     # Assuming the product id is stored in session
     product_id = str(product_id_checkout[0])
-    logging.info("product_id in handle checkout: " + product_id)
+    print("product_id in handle checkout: " + product_id)
     update_stock(product_id)
 
 def update_stock(product_id):
     logging.info('prep to update stock')
+    print('prep to update stock')
     # Get the product from the database
-    product = Product.query.filter_by(product_id=product_id).first()
+    product = Product.query.filter_by(id=id).first()
     logging.info('product for DB:'+ product)
     logging.info('product_id from webhook' + product_id)
 
