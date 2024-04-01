@@ -8,6 +8,9 @@ import stripe
 from flask_migrate import Migrate
 import time
 from datetime import datetime
+from werkzeug.security import check_password_hash, generate_password_hash
+from flask_httpauth import HTTPBasicAuth
+
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -15,6 +18,11 @@ app = Flask(__name__)
 
 app.secret_key = '101010'  # replace with your actual secret key
 
+auth = HTTPBasicAuth()
+
+USER_DATA = {
+    "admin": generate_password_hash("admin")
+}
 
 # Configure the SQLAlchemy part of the app instance
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bookings.db'
@@ -79,6 +87,25 @@ def index():
 def get_publishable_key():
     stripe_config = {"publicKey": stripe_keys["publishable_key"]}
     return jsonify(stripe_config)
+
+#DB dashboard auth
+@auth.verify_password
+def verify_password(username, password):
+    if username in USER_DATA and \
+            check_password_hash(USER_DATA.get(username), password):
+        return username
+
+
+@app.route('/db_dashboard')
+@auth.login_required
+def db_dashboard():
+    tables = db.engine.table_names()
+    tables_data = {}
+    for table in tables:
+        data = db.session.query(table).all()
+        tables_data[table] = [str(item) for item in data]
+    return render_template('db_dashboard.html', tables=tables_data)
+
 
 @app.route('/process_variable', methods=['GET', 'POST'])
 def process_variable():

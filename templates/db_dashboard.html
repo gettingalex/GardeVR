@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DB Dashboard</title>
+</head>
+<body>
+    {% for table, data in tables.items() %}
+        <h2>{{ table }}</h2>
+        <ul>
+            {% for item in data %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+</body>
+</html>
