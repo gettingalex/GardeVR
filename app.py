@@ -55,7 +55,7 @@ class User(db.Model):
         return f'<User {self.firstname}>'
     
 class Product(db.Model):
-    id = db.Column(db.String(100), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     product_name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(100), nullable=False) 
@@ -110,7 +110,7 @@ def db_dashboard():
         print(result)
         #data = [dict(row) for row in result]
         #tables_data[table] = data
-    return str(result)
+    return 'testing'
     #return render_template('db_dashboard.html', tables=tables_data)
 
 
