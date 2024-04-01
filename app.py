@@ -55,7 +55,17 @@ class Product(db.Model):
 
     def __repr__(self):
         return f'<Product {self.name}>'
+
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    product_id = db.Column(db.String(100), db.ForeignKey('product.id'), nullable=False)
+    order_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    user = db.relationship('User', backref=db.backref('orders', lazy=True))
+    product = db.relationship('Product', backref=db.backref('orders', lazy=True))
     
+    def __repr__(self):
+        return f'<Order {self.id}>'
 #End of DB setup
 
 
@@ -147,6 +157,7 @@ def webhook():
             product_id_checkout.append(session_product_id)
             print("Product_id:" + session_product_id)
             print("product_id_checkout:" + str(product_id_checkout[0]))
+            handle_checkout_session(product_id_checkout)
             
         else:
             print("No metadata")
@@ -156,9 +167,10 @@ def webhook():
         # Then define and call a method to handle the successful checkout
 
         # Fulfill the purchase...
-        if product_id_checkout:
-            handle_checkout_session(product_id_checkout)
+        #if product_id_checkout:
+        #    handle_checkout_session(product_id_checkout)
     
+
     else:
         print('Unhandled event type {}'.format(event['type']))
 
@@ -166,7 +178,7 @@ def webhook():
 
 
 def handle_checkout_session(product_id_checkout):
-    print("Payment was successful.")
+    print("Payment was successful in handle checkout.")
     # Assuming the product id is stored in session
     product_id = str(product_id_checkout[0])
     ("product_id in handle checkout: " + product_id)
