@@ -101,7 +101,7 @@ def verify_password(username, password):
 @app.route('/db_dashboard')
 @auth.login_required
 def db_dashboard():
-    inspector = inspect(db.session)
+    inspector = inspect(db.engine)
     tables = inspector.get_table_names()
     tables_data = {}
     for table in tables:
