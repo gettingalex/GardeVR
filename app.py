@@ -110,7 +110,7 @@ def db_dashboard():
         print(result)
         #data = [dict(row) for row in result]
         #tables_data[table] = data
-    return success
+    return 'testing'
     #return render_template('db_dashboard.html', tables=tables_data)
 
 
