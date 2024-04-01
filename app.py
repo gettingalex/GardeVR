@@ -225,10 +225,11 @@ def update_stock(product_id):
     print('product_id from webhook' + product_id)
 
     # Decrease the stock by 1
-    #product.stock -= 1
-
+    product.stock -= 1
+    print('stock reduce by 1')
     # Commit the changes
-    #db.session.commit()
+    db.session.commit()
+    print('stock change commited')
 
 @app.route("/success")
 def success():
