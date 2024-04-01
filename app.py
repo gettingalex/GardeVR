@@ -235,7 +235,7 @@ def update_stock(product_id):
     print('product_id from webhook' + product_id)
 
     # Decrease the stock by 1
-    product.stock -= 1
+    product.stock_quantity -= 1
     logging.info('stock reduced by 1')
     print('stock reduced by 1')
 
