@@ -1,6 +1,6 @@
 #code reference https://testdriven.io/blog/flask-stripe-tutorial/ with repo https://github.com/testdrivenio/flask-stripe-checkout
 
-import inspect
+from sqlalchemy import inspect
 import os
 from flask import Flask, jsonify, render_template, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
