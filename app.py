@@ -229,9 +229,9 @@ def update_stock(product_id):
     print('prep to update stock')
     # Get the product from the database
     product = Product.query.filter_by(id=product_id).first()
-    logging.info('product for DB:'+ product)
+    logging.info('product for DB:'+ str(product))
     logging.info('product_id from webhook' + product_id)
-    print('product for DB:'+ product)
+    print('product for DB:'+ str(product))
     print('product_id from webhook' + product_id)
 
     # Decrease the stock by 1
