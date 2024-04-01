@@ -105,7 +105,7 @@ def db_dashboard():
     tables = inspector.get_table_names()
     tables_data = {}
     for table in tables:
-        data = db.session.query(db.Model).from_statement(text(f"SELECT * FROM {table}")).all()
+        data = db.session.query(eval(table)).all()
         tables_data[table] = [str(item) for item in data]
     return render_template('db_dashboard.html', tables=tables_data)
 
