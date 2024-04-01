@@ -105,7 +105,7 @@ def db_dashboard():
     tables = inspector.get_table_names()
     tables_data = {}
     for table in tables:
-        query = text(f"SELECT * FROM {table}")
+        query = text(f'SELECT * FROM "{table}"')
         result = db.session.execute(query)
         print(result)
         #data = [dict(row) for row in result]
