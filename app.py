@@ -12,6 +12,7 @@ from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_httpauth import HTTPBasicAuth
 from sqlalchemy import text
+import logging
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -166,13 +167,13 @@ def webhook():
     sig_header = request.headers['STRIPE_SIGNATURE']
     print(payload)
     print("received webhook")
+    logging.info('received webhook')
     product_id_checkout = []
 
     try:
         event = stripe.Webhook.construct_event(
             payload, sig_header, stripe_keys["endpoint_secret"]
         )
-        print("listening for event")
 
     except ValueError as e:
         # Invalid payload
@@ -183,17 +184,21 @@ def webhook():
 
     # Handle the webook 
     if event['type'] == 'payment_intent.succeeded' or event['type'] == 'charge.succeeded' or event['type'] == 'payment_intent.created' or event['type'] == 'checkout.session.completed':
-        print('payment intent succeeded')
+        print('found event type')
+        logging.info('found event type')
         session_metadata = event['data']['object']['metadata']
         if session_metadata:
             session_product_id = event['data']['object']['metadata']['product_id']
             product_id_checkout.append(session_product_id)
             print("Product_id:" + session_product_id)
+            logging.info("Product_id:" + session_product_id)
             print("product_id_checkout:" + str(product_id_checkout[0]))
+            logging.info("product_id_checkout:" + str(product_id_checkout[0]))
             handle_checkout_session(product_id_checkout)
             
         else:
             print("No metadata")
+            logging.info('No metadata')
             # Then define and call a method to handle the successful checkout
             # Fulfill the purchase...
             # handle_checkout_session(session_product_id)
@@ -206,29 +211,33 @@ def webhook():
 
     else:
         print('Unhandled event type {}'.format(event['type']))
+        logging.info('Unhandled event type {}'.format(event['type']))
 
     return 'success' ##jsonify(success=True)
 
 
 def handle_checkout_session(product_id_checkout):
     print("Payment was successful in handle checkout.")
+    logging.info("Payment was successful in handle checkout.")
     # Assuming the product id is stored in session
     product_id = str(product_id_checkout[0])
-    ("product_id in handle checkout: " + product_id)
-    #update_stock(product_id)
+    logging.info("product_id in handle checkout: " + product_id)
+    update_stock(product_id)
 
 def update_stock(product_id):
-    print('prep to update stock')
+    logging.info('prep to update stock')
     # Get the product from the database
     product = Product.query.filter_by(product_id=product_id).first()
-    print('product for DB:'+ product)
-    print('product_id from webhook' + product_id)
+    logging.info('product for DB:'+ product)
+    logging.info('product_id from webhook' + product_id)
 
     # Decrease the stock by 1
-    #product.stock -= 1
+    product.stock -= 1
+    logging.info('stock reduced by 1')
 
     # Commit the changes
-    #db.session.commit()
+    db.session.commit()
+    logging.info('db changed commited')
 
 @app.route("/success")
 def success():
