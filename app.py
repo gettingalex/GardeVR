@@ -1,5 +1,6 @@
 #code reference https://testdriven.io/blog/flask-stripe-tutorial/ with repo https://github.com/testdrivenio/flask-stripe-checkout
 
+import inspect
 import os
 from flask import Flask, jsonify, render_template, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
@@ -99,7 +100,8 @@ def verify_password(username, password):
 @app.route('/db_dashboard')
 @auth.login_required
 def db_dashboard():
-    tables = db.engine.table_names()
+    inspector = inspect(db.engine)
+    tables = inspector.get_table_names()
     tables_data = {}
     for table in tables:
         data = db.session.query(table).all()
