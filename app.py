@@ -248,7 +248,7 @@ def update_stock(product_id, address, email, name):
 
     # Create user
     # Check if user with the given address and name already exists
-    existing_user = User.query.filter_by(address=address, name=name).first()
+    existing_user = User.query.filter_by(email=email).first()
     if existing_user is None:
         # Create a new user
         new_user = User(name=name, firstname="", lastname="", email=email, address=address)
