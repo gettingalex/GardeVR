@@ -33,8 +33,8 @@ fetch("/config")
       var quantity = this.getAttribute('data-quantity');
       if(quantity == 0) {
         // Update the button text and disable it
-        button.textContent += " n'est plus disponible";
-        button.disabled = true;
+        this.textContent += " n'est plus disponible";
+        this.disabled = true;
       }
       fetch('/process_variable', {
         method: 'POST',
