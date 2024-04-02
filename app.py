@@ -248,19 +248,19 @@ def update_stock(product_id, address, email, name):
 
     # Create user
     # Check if user with the given address and name already exists
-    #existing_user = User.query.filter_by(address=address, name=name).first()
-    #if existing_user is None:
-    #    # Create a new user
-    #    new_user = User(name=name, firstname="", lastname="", email=email, address=address)
-    #    db.session.add(new_user)
-    #    db.session.commit()
-    #    logging.info('New user added to the database')
-    #    print('New user added to the database')
+    existing_user = User.query.filter_by(address=address, name=name).first()
+    if existing_user is None:
+        # Create a new user
+        new_user = User(name=name, firstname="", lastname="", email=email, address=address)
+        db.session.add(new_user)
+        db.session.commit()
+        logging.info('New user added to the database')
+        print('New user added to the database')
     
     # Create a new order
-    #user_id = existing_user.id if existing_user else new_user.id
-    #new_order = Order(user_id=user_id, product_id=product_id, order_date=datetime.utcnow())
-    #db.session.add(new_order)
+    user_id = existing_user.id if existing_user else new_user.id
+    new_order = Order(user_id=user_id, product_id=product_id, order_date=datetime.utcnow())
+    db.session.add(new_order)
 
     # Commit the changes
     db.session.commit()
