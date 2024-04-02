@@ -1,4 +1,21 @@
-console.log("Sanity check!");
+console.log("Main.js loaded");
+
+
+// Select all buttons with class 'submitBtn'
+var buttons = document.querySelectorAll('.submitBtn');
+
+// Loop through each button
+buttons.forEach(function(button) {
+    // Get the stock quantity from the 'data-quantity' attribute
+    var quantity = button.getAttribute('data-quantity');
+
+    // Check if the quantity is 0
+    if(quantity == 0) {
+        // Update the button text and disable it
+        button.textContent += " n'est plus disponible";
+        button.disabled = true;
+    }
+});
 
 // Get Stripe publishable key
 fetch("/config")
@@ -36,6 +53,10 @@ fetch("/config")
       });
     });
   }
+
+
+
+  
   // Installment event handler
   const buttonsTwo = document.getElementsByClassName("submitBtn-installment");
   for(let i = 0; i < buttonsTwo.length; i++) {
