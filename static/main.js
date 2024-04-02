@@ -30,6 +30,12 @@ fetch("/config")
     buttonsOne[i].addEventListener("click", function() {
       var price_var = this.getAttribute('price_ID'); // 'this' refers to the button that was clicked
       var product_id = this.getAttribute('product_ID');
+      var quantity = this.getAttribute('data-quantity');
+      if(quantity == 0) {
+        // Update the button text and disable it
+        button.textContent += " n'est plus disponible";
+        button.disabled = true;
+      }
       fetch('/process_variable', {
         method: 'POST',
         headers: {
