@@ -165,7 +165,7 @@ def webhook():
     event = None
     payload = request.data
     sig_header = request.headers['STRIPE_SIGNATURE']
-    print(payload)
+    #print(payload)
     print("received webhook")
     logging.info('received webhook')
     product_id_checkout = []
@@ -229,10 +229,10 @@ def update_stock(product_id):
     print('prep to update stock')
     # Get the product from the database
     product = Product.query.filter_by(id=product_id).first()
-    logging.info('product for DB:'+ str(product))
-    logging.info('product_id from webhook' + product_id)
-    print('product for DB:'+ str(product))
-    print('product_id from webhook' + product_id)
+    #logging.info('product for DB:'+ str(product))
+    #logging.info('product_id from webhook' + product_id)
+    #print('product for DB:'+ str(product))
+    #print('product_id from webhook' + product_id)
 
     # Decrease the stock by 1
     product.stock_quantity -= 1
