@@ -34,6 +34,9 @@ fetch("/config")
       if(quantity == 0) {
         // Update the button text and disable it
         this.textContent += " n'est plus disponible";
+        var buttonIndex = Array.from(buttonsOne).indexOf(this);
+        var correspondingButton = document.getElementsByClassName("submitBtn")[buttonIndex];
+        correspondingButton.textContent += " n'est plus disponible";
         this.disabled = true;
       }
       fetch('/process_variable', {
