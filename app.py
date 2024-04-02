@@ -165,7 +165,7 @@ def webhook():
     event = None
     payload = request.data
     sig_header = request.headers['STRIPE_SIGNATURE']
-    #print(payload)
+    print(payload)
     print("received webhook")
     logging.info('received webhook')
     product_id_checkout = []
@@ -194,7 +194,12 @@ def webhook():
             logging.info("Product_id:" + session_product_id)
             print("product_id_checkout:" + str(product_id_checkout[0]))
             logging.info("product_id_checkout:" + str(product_id_checkout[0]))
-            handle_checkout_session(product_id_checkout)
+
+            session_address = event['data']['object']['customer_details']['address']
+            session_email = event['data']['object']['customer_details']['email']
+            session_name = event['data']['object']['customer_details']['name']
+
+            handle_checkout_session(product_id_checkout, session_address, session_email, session_name)
             
         else:
             print("No metadata")
@@ -216,15 +221,17 @@ def webhook():
     return 'success' ##jsonify(success=True)
 
 
-def handle_checkout_session(product_id_checkout):
+def handle_checkout_session(product_id_checkout, session_address, session_email, session_name):
     print("Payment was successful in handle checkout.")
     logging.info("Payment was successful in handle checkout.")
     # Assuming the product id is stored in session
     product_id = str(product_id_checkout[0])
     print("product_id in handle checkout: " + product_id)
-    update_stock(product_id)
+    address = f"{session_address['line1']}, {session_address['line2']}, {session_address['city']}, {session_address['state']}, {session_address['country']}, {session_address['postal_code']}"
+    print('user address in handle checkout: ' + address)
+    update_stock(product_id, address, session_email, session_name)
 
-def update_stock(product_id):
+def update_stock(product_id, address, email, name):
     logging.info('prep to update stock')
     print('prep to update stock')
     # Get the product from the database
@@ -239,9 +246,25 @@ def update_stock(product_id):
     logging.info('stock reduced by 1')
     print('stock reduced by 1')
 
+    # Create user
+    # Check if user with the given address and name already exists
+    #existing_user = User.query.filter_by(address=address, name=name).first()
+    #if existing_user is None:
+    #    # Create a new user
+    #    new_user = User(name=name, firstname="", lastname="", email=email, address=address)
+    #    db.session.add(new_user)
+    #    db.session.commit()
+    #    logging.info('New user added to the database')
+    #    print('New user added to the database')
+    
+    # Create a new order
+    #user_id = existing_user.id if existing_user else new_user.id
+    #new_order = Order(user_id=user_id, product_id=product_id, order_date=datetime.utcnow())
+    #db.session.add(new_order)
+
     # Commit the changes
     db.session.commit()
-    logging.info('db changed commited')
+    #logging.info('db changed commited')
     print('db changed commited')
 
 @app.route("/success")
