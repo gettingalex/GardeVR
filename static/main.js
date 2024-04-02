@@ -1,20 +1,20 @@
 console.log("Main.js loaded");
 
-
-// Select all buttons with class 'submitBtn'
-var buttons = document.querySelectorAll('.submitBtn');
-
-// Loop through each button
-buttons.forEach(function(button) {
-    // Get the stock quantity from the 'data-quantity' attribute
-    var quantity = button.getAttribute('data-quantity');
-
-    // Check if the quantity is 0
-    if(quantity == 0) {
-        // Update the button text and disable it
-        button.textContent += " n'est plus disponible";
-        button.disabled = true;
-    }
+document.addEventListener("DOMContentLoaded", function() {
+  // Select all buttons with class 'submitBtn'
+  var buttons = document.querySelectorAll('.submitBtn');
+  // Loop through each button
+  buttons.forEach(function(button) {
+      // Get the stock quantity from the 'data-quantity' attribute
+      var quantity = button.getAttribute('data-quantity');
+      console.log(quantity)
+      // Check if the quantity is 0
+      if(quantity == 0) {
+          // Update the button text and disable it
+          button.textContent += " n'est plus disponible";
+          button.disabled = true;
+      }
+  });
 });
 
 // Get Stripe publishable key
@@ -34,9 +34,6 @@ fetch("/config")
       if(quantity == 0) {
         // Update the button text and disable it
         this.textContent += " n'est plus disponible";
-        var buttonIndex = Array.from(buttonsOne).indexOf(this);
-        var correspondingButton = document.getElementsByClassName("submitBtn")[buttonIndex];
-        correspondingButton.textContent += " n'est plus disponible";
         this.disabled = true;
       }
       fetch('/process_variable', {
