@@ -4,8 +4,8 @@
   <section class="section">
     {% for product in products %}
     <div class="container">
-      <!--id="submitBtn+{{product.id}}">-->
-      <button class="button submitBtn" price_ID={{product.price_id}} product_ID={{product.id}} id="submitBtn" data-quantity="{{product.stock_quantity}}" style="background-color: yellow;">{{ product.product_name}}</button>
+      <!--id="submitBtn+{{product.id}}">--> 
+      <button class="button submitBtn" price_ID={{product.price_id}} product_ID={{product.id}} id="submitBtn" data-quantity="{{product.stock_quantity}}" style="background-color: f5f242; ">{{ product.product_name}}</button>
       
     </div>
     {% endfor %}
