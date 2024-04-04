@@ -81,4 +81,22 @@
         </div>
 
     </body>
+    <script>
+        // Select all buttons with class 'submitBtn'
+        var buttons = document.querySelectorAll('.submitBtn');
+      
+        // Loop through each button
+        buttons.forEach(function(button) {
+          // Add click event listener
+          button.addEventListener('click', function(event) {
+            // Show confirmation dialog
+            var confirm = window.confirm('Please agree to the terms and conditions.');
+      
+            // If user clicked 'Cancel', prevent the action
+            if (!confirm) {
+              event.preventDefault();
+            }
+          });
+        });
+      </script>
 </html>
