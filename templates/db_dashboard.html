@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>DB Dashboard</title>
-</head>
-<body>
-    {% for table, data in tables.items() %}
-        <h2>{{ table }}</h2>
-        <ul>
-            {% for item in data %}
-                <li>{{ item }}</li>
-                <br>
-            {% endfor %}
-        </ul>
-    {% endfor %}
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="section">
+        {% for table, data in tables.items() %}
+            <h2>{{ table }}</h2>
+            <ul>
+                {% for item in data %}
+                    <li>{{ item }}</li>
+                    <br>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </section>
+{% endblock %}

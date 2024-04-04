@@ -8,35 +8,39 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
         <link rel="stylesheet" href="style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
         <script src="https://js.stripe.com/v3/"></script>
         <script src="{{ url_for('static', filename='main.js') }}"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
         
   </head>
             <!-- Favicons -->
-        <link rel="apple-touch-icon" href="logo.png" sizes="180x180">
-        <link rel="icon" href="logo.png" sizes="32x32" type="image/png">
-        <link rel="icon" href="logo.png" sizes="16x16" type="image/png">
-        <link rel="mask-icon" href="/docs/5.3/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
-        <link rel="icon" href="logo.png">
-        <meta name="theme-color" content="#712cf9"> 
+        <link rel="apple-touch-icon" href="img/logo.ico" sizes="180x180">
+        <link rel="icon" href="logo.ico" sizes="32x32" type="image/png">
+        <link rel="icon" href="logo.ico" sizes="16x16" type="image/png">
+        <link rel="mask-icon" href="/docs/5.3/assets/img/favicons/safari-pinned-tab.svg" color="#F8CA00">
+        <link rel="icon" href="logo.ico">
+        <meta name="theme-color" content="#F8CA00"> 
     </head>
     <body>
         
         <div class="container py-3">
         <header>
-            <div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom">
-            <a href="/" class="d-flex align-items-center link-body-emphasis text-decoration-none">
-                <img src="logo.png" alt="garde vr logo">
-                <span class="fs-4">GardeVR</span>
-            </a>
-
-            <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
-                <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">Features</a>
-                <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">Enterprise</a>
-                <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">Support</a>
-                <a class="py-2 link-body-emphasis text-decoration-none" href="#">Prix</a>
-            </nav>
+            <div class="header-width d-flex flex-column flex-md-row align-items-center pb-0 mb-0 border-bottom">
+                <a href="/" class="d-flex align-items-center link-body-emphasis text-decoration-none">
+                    <span class="fs-2 header_logo_1">Secur</span>
+                    <img id='nav-logo'src="img/logo-yellow-long.jpg" alt="secur vr logo">
+                    <span class="fs-2 header_logo_2">VR</span>
+                </a>
+    
+                <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
+                    <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="https://securvr.ca#Services">Services</a>
+                    <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="https://securvr.ca#FAQ">FAQ</a>
+                    <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="https://securvr.ca#Directions">Directions</a>
+                    <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="mailto:fermetroissaumons@gmail.com">Contact</a>
+                </nav>
             </div>
 
         </header>
@@ -55,22 +59,22 @@
             <div class="col-6 col-md">
                 
                 <ul class="list-unstyled text-small">
-                <li class="mb-1"><a class="link-secondary text-decoration-none" href="https://gardevr.ca">GardeVR.ca</a></li>
+                <li class="mb-1"><a class="link-secondary text-decoration-none" href="https://securvr.ca">SecurVR.ca</a></li>
                 <li class="mb-1"><a class="link-secondary text-decoration-none" href="mailto:fermetroissaumons@gmail.com">Reserver pour de l'équipements agricoles</a></li>
                 </ul>
             </div>
             <div class="col-6 col-md">
                 
                 <ul class="list-unstyled text-small">
-                <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Foire aux Questions / FAQ</a></li>
-                <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Locations</a></li>
+                <li class="mb-1"><a class="link-secondary text-decoration-none" href="https://securvr.ca#FAQ">Foire aux Questions / FAQ</a></li>
+                <li class="mb-1"><a class="link-secondary text-decoration-none" href="https://securvr.ca#directions">Directions</a></li>
                 </ul>
             </div>
             <div class="col-6 col-md">
                 
                 <ul class="list-unstyled text-small">
-                <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Contactez-vous</a></li>
-                <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Termes et conditions</a></li>
+                <li class="mb-1"><a class="link-secondary text-decoration-none" href="mailto:fermetroissaumons@gmail.com">Contactez-vous</a></li>
+                <li class="mb-1"><a class="link-secondary text-decoration-none" href="https://securvr.ca/termes">Termes et conditions</a></li>
                 </ul>
             </div>
             </div>
