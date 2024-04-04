@@ -1,16 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <section class="section">
+  <section class="section main-reserve">
     <h2 class="my-2"><strong>Paiement</strong></h2>
     <h3 class="my-2"><strong>Sélectionner la dimension de votre roulotte</strong></h3>
-    {% for product in products %}
     <div class="container">
+    {% for product in products %}
       <!--id="submitBtn+{{product.id}}">--> 
       <button class="button action-btn submitBtn" price_ID={{product.price_id}} product_ID={{product.id}} id="submitBtn" data-quantity="{{product.stock_quantity}}" style="background-color: f5f242; ">{{ product.product_name}}</button>   
-    </div>
     {% endfor %}
-    <div class="container mt-3">
-      <a href="https://securvr.ca" class="button action-btn">Retourné à SecurVR.ca</a>
+      <a href="https://securvr.ca" class="button action-bt mt-3">Retourné à SecurVR.ca</a>
+    </div>
   </section>
 {% endblock %}
