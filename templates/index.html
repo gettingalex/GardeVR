@@ -2,12 +2,15 @@
 
 {% block content %}
   <section class="section">
+    <h2 class="my-2">Paiement</h2>
+    <h3 class="my-2">Sélectionner la dimension de votre roulotte</h3>
     {% for product in products %}
     <div class="container">
       <!--id="submitBtn+{{product.id}}">--> 
       <button class="button action-btn submitBtn" price_ID={{product.price_id}} product_ID={{product.id}} id="submitBtn" data-quantity="{{product.stock_quantity}}" style="background-color: f5f242; ">{{ product.product_name}}</button>   
     </div>
     {% endfor %}
-    <a href="https://securvr.ca" class="button action-btn">Retourné à SecurVR.ca</a>
+    <div class="container mt-3">
+      <a href="https://securvr.ca" class="button action-btn">Retourné à SecurVR.ca</a>
   </section>
 {% endblock %}
