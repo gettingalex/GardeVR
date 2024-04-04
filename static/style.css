@@ -95,12 +95,11 @@ body {
 .header {
     background-color: #fff;
     text-align: center;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 }
 
 .header-width {
     max-width: 100%;
-    margin: auto;
+    margin:auto;
 }
 
 .logo {
