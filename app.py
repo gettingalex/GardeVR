@@ -19,7 +19,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 
-app.secret_key = '101010'  # replace with your actual secret key
+app.secret_key = os.environ["app_secret_key"]  # replace with your actual secret key
+
 
 auth = HTTPBasicAuth()
 
@@ -152,6 +153,7 @@ def create_checkout_session():
             metadata={"product_id":product_id},
             billing_address_collection="required",
             automatic_tax={"enabled": True},
+            invoice_creation={"enabled": True},
             #tax_behavior="exclusive",
             mode="payment",
             expires_at=int(time.time() + (3600 * 2)), # Configured to expire after 2 hours
@@ -288,4 +290,4 @@ def cancelled():
 
 if __name__ == '__main__':
     print("Starting Flask app...")
-    app.run(host="0.0.0.0", debug=True, port=10000)
+    app.run(host="0.0.0.0", debug=False, port=10000)
