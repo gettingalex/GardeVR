@@ -62,13 +62,17 @@ fetch("/config")
 });
 
 
+// Modal for terms and conditions
 
-  // Select all buttons with class 'submitBtn'
+// Select all buttons with class 'submitBtn'
 var buttons = document.querySelectorAll('.submitBtn');
 
 // Select the modal and the "I Agree" button
 var modal = document.getElementById('termsModal');
 var agreeBtn = document.getElementById('agreeBtn');
+
+// Variable to store the clicked button's information
+var clickedButton;
 
 // Loop through each button
 buttons.forEach(function(button) {
@@ -76,6 +80,9 @@ buttons.forEach(function(button) {
   button.addEventListener('click', function(event) {
     // Prevent the initial action
     event.preventDefault();
+
+    // Store the clicked button's information
+    clickedButton = button;
 
     // Show the modal
     modal.style.display = "block";
@@ -85,7 +92,34 @@ buttons.forEach(function(button) {
 // When the user clicks on "I Agree", hide the modal and proceed with the initial action
 agreeBtn.addEventListener('click', function() {
   modal.style.display = "none";
-  window.location.href = button.getAttribute('href');
+
+  // Proceed with the initial action using the clicked button's information
+  var priceId = clickedButton.getAttribute('price_ID');
+  var productId = clickedButton.getAttribute('product_ID');
+  var quantity = clickedButton.getAttribute('data-quantity');
+
+  // Do something with priceId, productId, and quantity...
+  fetch('/process_variable', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({product_price: price_var, product_ID: product_id}),
+  })
+  .then(response => response.text())
+  .then(() => {
+    // Get Checkout Session ID
+    return fetch("/create-checkout-session")
+  })
+  .then((result) => { return result.json(); })
+  .then((data) => {
+    console.log(data);
+    // Redirect to Stripe Checkout
+    return stripe.redirectToCheckout({sessionId: data.sessionId})
+  })
+  .then((res) => {
+    console.log(res);
+  });
 });
 
 
