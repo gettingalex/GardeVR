@@ -91,6 +91,7 @@ buttons.forEach(function(button) {
   });
 });
 
+modal.style.display = "block";
 // When the user clicks on "I Agree", hide the modal and proceed with the initial action
 agreeBtn.addEventListener('click', function() {
   modal.style.display = "none";
