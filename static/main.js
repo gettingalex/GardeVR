@@ -31,7 +31,6 @@ fetch("/config")
       var price_var = this.getAttribute('price_ID'); // 'this' refers to the button that was clicked
       var product_id = this.getAttribute('product_ID');
       var quantity = this.getAttribute('data-quantity');
-      /* Comment out for Testing
       if(quantity == 0) {
         // Update the button text and disable it
         this.textContent += " n'est plus disponible";
@@ -58,23 +57,18 @@ fetch("/config")
       .then((res) => {
         console.log(res);
       });
-      */
     });
-  };
+  }
 });
 
 
-// Modal for terms and conditions
+// NEW CODE
 
 // Select all buttons with class 'submitBtn'
-const buttons = document.querySelectorAll('.submitBtn');
-
-// Select the modal and the "I Agree" button
-const modal = document.getElementById('termsModal');
-const agreeBtn = document.getElementById('agreeBtn');
+var buttons = document.querySelectorAll('.submitBtn');
 
 // Variable to store the clicked button's information
-let clickedButton;
+var clickedButton;
 
 // Loop through each button
 buttons.forEach(function(button) {
@@ -86,45 +80,21 @@ buttons.forEach(function(button) {
     // Store the clicked button's information
     clickedButton = button;
 
-    // Show the modal
-    modal.style.display = "block";
+    // Redirect to terms.html
+    window.location.href = '/termes.html';
   });
 });
 
-// When the user clicks on "I Agree", hide the modal and proceed with the initial action
-agreeBtn.addEventListener('click', function() {
-  modal.style.display = "none";
-
-  // Proceed with the initial action using the clicked button's information
-  var priceId = clickedButton.getAttribute('price_ID');
-  var productId = clickedButton.getAttribute('product_ID');
-  var quantity = clickedButton.getAttribute('data-quantity');
-
-  // Do something with priceId, productId, and quantity...
-  fetch('/process_variable', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({product_price: price_var, product_ID: product_id}),
-  })
-  .then(response => response.text())
-  .then(() => {
-    // Get Checkout Session ID
-    return fetch("/create-checkout-session")
-  })
-  .then((result) => { return result.json(); })
-  .then((data) => {
-    console.log(data);
-    // Redirect to Stripe Checkout
-    return stripe.redirectToCheckout({sessionId: data.sessionId})
-  })
-  .then((res) => {
-    console.log(res);
+// When the user clicks on "accept-btn" on termes.html, send a POST request to "/create-checkout-session"
+var acceptBtn = document.getElementById('accept-btn');
+if (acceptBtn) {
+  acceptBtn.addEventListener('click', function() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/create-checkout-session', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send('product_id=' + clickedButton.getAttribute('product_ID') + '&price_id=' + clickedButton.getAttribute('price_ID') + '&quantity=' + clickedButton.getAttribute('data-quantity'));
   });
-});
-
-
+}
 
   // Installment event handler
   // const buttonsTwo = document.getElementsByClassName("submitBtn-installment");
@@ -154,3 +124,7 @@ agreeBtn.addEventListener('click', function() {
   //     });
   //   });
   // }
+
+
+
+

@@ -2,7 +2,7 @@
 
 from sqlalchemy import inspect
 import os
-from flask import Flask, jsonify, render_template, request, redirect, session
+from flask import Flask, jsonify, render_template, request, redirect, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 import stripe
@@ -122,11 +122,14 @@ def process_variable():
     # Now you can use 'price' in your application
     return 'Success!', 200
 
-@app.route("/create-checkout-session")
+@app.route("/create-checkout-session", methods=['POST'])
 def create_checkout_session():
+    product_id = request.form.get('product_id')
+    price = request.form.get('price_id')
+    quantity = request.form.get('quantity')
     stripe.api_key = stripe_keys["secret_key"]
-    price = session.get('price')  # retrieve price from session
-    product_id = session.get('product_id') #retrieve product_id from session
+    # price = session.get('price')  # retrieve price from session
+    # product_id = session.get('product_id') #retrieve product_id from session
     try:
         # Create new Checkout Session for the order
         # Other optional params include:
@@ -154,7 +157,8 @@ def create_checkout_session():
                 }
             ]
         )
-        return jsonify({"sessionId": checkout_session["id"]})
+        #return jsonify({"sessionId": checkout_session["id"]})
+        return redirect(url_for('checkout', session_id=session.id))
     except Exception as e:
         return jsonify(error=str(e)), 403
 
