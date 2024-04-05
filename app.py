@@ -2,7 +2,7 @@
 
 from sqlalchemy import inspect
 import os
-from flask import Flask, jsonify, render_template, request, redirect, session, url_for
+from flask import Flask, jsonify, render_template, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 import stripe
@@ -113,6 +113,14 @@ def db_dashboard():
         tables_data[table] = data
     return render_template('db_dashboard.html', tables=tables_data)
 
+@app.route('/termes')
+def termes():
+    product_id = request.args.get('product_id')
+    price_id = request.args.get('price_id')
+    quantity = request.args.get('quantity')
+
+    return render_template('termes.html', product_id=product_id, price_id=price_id, quantity=quantity)
+
 
 @app.route('/process_variable', methods=['GET', 'POST'])
 def process_variable():
@@ -122,14 +130,11 @@ def process_variable():
     # Now you can use 'price' in your application
     return 'Success!', 200
 
-@app.route("/create-checkout-session", methods=['POST'])
+@app.route("/create-checkout-session")
 def create_checkout_session():
-    product_id = request.form.get('product_id')
-    price = request.form.get('price_id')
-    quantity = request.form.get('quantity')
     stripe.api_key = stripe_keys["secret_key"]
-    # price = session.get('price')  # retrieve price from session
-    # product_id = session.get('product_id') #retrieve product_id from session
+    price = session.get('price')  # retrieve price from session
+    product_id = session.get('product_id') #retrieve product_id from session
     try:
         # Create new Checkout Session for the order
         # Other optional params include:
@@ -157,8 +162,7 @@ def create_checkout_session():
                 }
             ]
         )
-        #return jsonify({"sessionId": checkout_session["id"]})
-        return redirect(url_for('checkout', session_id=session.id))
+        return jsonify({"sessionId": checkout_session["id"]})
     except Exception as e:
         return jsonify(error=str(e)), 403
 
