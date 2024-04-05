@@ -67,14 +67,14 @@ fetch("/config")
 // Modal for terms and conditions
 
 // Select all buttons with class 'submitBtn'
-var buttons = document.querySelectorAll('.submitBtn');
+const buttons = document.querySelectorAll('.submitBtn');
 
 // Select the modal and the "I Agree" button
-var modal = document.getElementById('termsModal');
-var agreeBtn = document.getElementById('agreeBtn');
+const modal = document.getElementById('termsModal');
+const agreeBtn = document.getElementById('agreeBtn');
 
 // Variable to store the clicked button's information
-var clickedButton;
+let clickedButton;
 
 // Loop through each button
 buttons.forEach(function(button) {
@@ -91,7 +91,6 @@ buttons.forEach(function(button) {
   });
 });
 
-modal.style.display = "block";
 // When the user clicks on "I Agree", hide the modal and proceed with the initial action
 agreeBtn.addEventListener('click', function() {
   modal.style.display = "none";
