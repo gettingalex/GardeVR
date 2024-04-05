@@ -90,7 +90,7 @@
           // Add click event listener
           button.addEventListener('click', function(event) {
             // Show confirmation dialog
-            var confirm = window.confirm('Please agree to the terms and conditions.');
+            var confirm = window.confirm('<div>Please agree to the <a href="https://example.com/terms">terms and conditions</a>.</div>');
       
             // If user clicked 'Cancel', prevent the action
             if (!confirm) {
