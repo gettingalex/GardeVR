@@ -31,6 +31,7 @@ fetch("/config")
       var price_var = this.getAttribute('price_ID'); // 'this' refers to the button that was clicked
       var product_id = this.getAttribute('product_ID');
       var quantity = this.getAttribute('data-quantity');
+      /* Comment out for Testing
       if(quantity == 0) {
         // Update the button text and disable it
         this.textContent += " n'est plus disponible";
@@ -57,6 +58,7 @@ fetch("/config")
       .then((res) => {
         console.log(res);
       });
+      */
     });
   };
 });
