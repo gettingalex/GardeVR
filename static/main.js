@@ -58,40 +58,63 @@ fetch("/config")
         console.log(res);
       });
     });
-  }
+  };
+});
 
 
 
-  
+  // Select all buttons with class 'submitBtn'
+var buttons = document.querySelectorAll('.submitBtn');
+
+// Select the modal and the "I Agree" button
+var modal = document.getElementById('termsModal');
+var agreeBtn = document.getElementById('agreeBtn');
+
+// Loop through each button
+buttons.forEach(function(button) {
+  // Add click event listener
+  button.addEventListener('click', function(event) {
+    // Prevent the initial action
+    event.preventDefault();
+
+    // Show the modal
+    modal.style.display = "block";
+  });
+});
+
+// When the user clicks on "I Agree", hide the modal and proceed with the initial action
+agreeBtn.addEventListener('click', function() {
+  modal.style.display = "none";
+  window.location.href = button.getAttribute('href');
+});
+
+
+
   // Installment event handler
-  const buttonsTwo = document.getElementsByClassName("submitBtn-installment");
-  for(let i = 0; i < buttonsTwo.length; i++) {
-    buttonsTwo[i].addEventListener("click", function() {
-      var price_var = this.getAttribute('price_ID'); // 'this' refers to the button that was clicked
-      fetch('/process_variable', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({product_price: price_var}),
-      })
-      .then(response => response.text())
-      .then(() => {
-        // Get Checkout Session ID
-        return fetch("/create-installment-session")
-      })
-      .then((result) => { return result.json(); })
-      .then((data) => {
-        console.log(data);
-        // Redirect to Stripe Checkout
-        return stripe.redirectToCheckout({sessionId: data.sessionId})
-      })
-      .then((res) => {
-        console.log(res);
-      });
-    });
-  }
-}); // Add closing parenthesis and semicolon here
-
-
-
+  // const buttonsTwo = document.getElementsByClassName("submitBtn-installment");
+  // for(let i = 0; i < buttonsTwo.length; i++) {
+  //   buttonsTwo[i].addEventListener("click", function() {
+  //     var price_var = this.getAttribute('price_ID'); // 'this' refers to the button that was clicked
+  //     fetch('/process_variable', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({product_price: price_var}),
+  //     })
+  //     .then(response => response.text())
+  //     .then(() => {
+  //       // Get Checkout Session ID
+  //       return fetch("/create-installment-session")
+  //     })
+  //     .then((result) => { return result.json(); })
+  //     .then((data) => {
+  //       console.log(data);
+  //       // Redirect to Stripe Checkout
+  //       return stripe.redirectToCheckout({sessionId: data.sessionId})
+  //     })
+  //     .then((res) => {
+  //       console.log(res);
+  //     });
+  //   });
+  // }
