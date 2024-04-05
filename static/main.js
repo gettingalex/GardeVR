@@ -64,7 +64,7 @@ fetch("/config")
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({product_price: price_id, product_ID: product_id}),
+      body: JSON.stringify({product_price: price_var, product_ID: product_id}),
     })
     .then(response => response.text())
     .then(() => {
