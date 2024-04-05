@@ -290,4 +290,4 @@ def cancelled():
 
 if __name__ == '__main__':
     print("Starting Flask app...")
-    app.run(host="0.0.0.0", debug=False, port=10000)
+    app.run(host="0.0.0.0", debug=True, port=10000)
