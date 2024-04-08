@@ -7,7 +7,7 @@
     <div class="container">
     {% for product in products %}
       <!--id="submitBtn+{{product.id}}">--> 
-      <button class="button action-btn submitBtn" price_ID={{product.price_id}} product_ID={{product.id}} id="submitBtn" data-quantity="{{product.stock_quantity}}" style="background-color: f5f242; ">{{ product.product_name}}</button>   
+      <button class="button action-btn submitBtn" price_ID={{product.price_id}} product_ID={{product.id}} data-quantity="{{product.stock_quantity}}" style="background-color: f5f242; ">{{ product.product_name}}</button>   
     {% endfor %}
     </div>
     <div class="container mt-5">
