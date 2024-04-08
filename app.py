@@ -13,13 +13,11 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flask_httpauth import HTTPBasicAuth
 from sqlalchemy import text
 import logging
-from werkzeug.middleware.proxy_fix import ProxyFix
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
-app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
 
 app.secret_key = os.environ["app_secret_key"]  # replace with your actual secret key
 
